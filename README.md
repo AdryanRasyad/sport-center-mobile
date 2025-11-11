@@ -1,3 +1,4 @@
+TUGAS 7
 1. Jelaskan apa itu widget tree pada Flutter dan bagaimana hubungan parent-child (induk-anak) bekerja antar widget.
     Widget tree adalah struktur yang menggambarkan bagaimana semua elemen UI saling berhubungan. Setiap tampilan di flutter dibangun dari kumpulan widget yang tersusun seperti cabang pohon, mulai dari widget utama sebagai akar sampai widget terkecil seperti daun. Setiap widget berperan sebagai parent yang bisa menampung child di dalamnya. Parent widget bertanggung jawab mengatur tata letak, posisi, dan gaya dari widget anak, sedangkan child widget menampilkan konten yang lebih spesifik, seprti Text, Icon, Image, dan lainnya.
 
@@ -20,3 +21,24 @@
 
 6. Jelaskan konsep "hot reload" di Flutter dan bagaimana bedanya dengan "hot restart".
     Hot Reload dalah fitur di flutter yang memungkinkan developer untuk melihat hasil perubahan kode secara langsung tanpah harus quit dari aplikasi kemudian run lagi. Saat hot reload, Flutter hanya memperbarui bagian kode yang berubah dan mempertahankan state aplikasi, seperti variabel, posisi halaman, atau input pengguna yang sedang aktif. Sedangkan, hot restart juga memuat ulang aplikasi, tetapi mengulang seluruh proses dari awal, termasuk menghapus semua state yang sedang berjalan.
+
+TUGAS 8
+1. Jelaskan perbedaan antara Navigator.push() dan Navigator.pushReplacement() pada Flutter. Dalam kasus apa sebaiknya masing-masing digunakan pada aplikasi Football Shop kamu?
+    Navigator.push() menambahkan route ke paling atas stack sehingga route tersebut akan muncul dan ditampilkan ke user. Sedangkan, Navigator.pushReplacement() menghapus route yang sedang ditampilkan ke user dan menggantinya ke route lain, tanpa mengubah kondisi elemen stack di bawahnya. Pada Navigator.push(), halaman sebelumnya masih tersimpan di dalam stack sehingga user dapat kembali ke halaman tersebut. Misalnya kalua dalam aplikasi Football Shop saya adalah saat berpindah dari homepage ke form. Sebaliknya, Navigator.pushReplacement() digunakan ketika halaman sebelumnya tidak lagi relevan untuk diakses, karena halaman baru sepenuhnya menggantikannya di stack. Dalam Sport Center, Navigator.pushReplacement() dipakai saat navigasi ke home page.
+
+2.  Bagaimana kamu memanfaatkan hierarchy widget seperti Scaffold, AppBar, dan Drawer untuk membangun struktur halaman yang konsisten di seluruh aplikasi?
+    Setiap halaman utama, seperti MyHomePage dan ProductFormPage, menggunakan Scaffold sebagai kerangka utama, seperti area untuk AppBar, Drawer, dan body. Widget AppBar digunakan untuk menampilkan judul halaman, seperti “Sport Center” atau “Add Product Form”, sehingga pengguna dapat mengetahui konteks halaman yang sedang diakses. Selain itu, Drawer yang diimplementasikan melalui widget LeftDrawer berfungsi sebagai navigasi yang muncul di semua halaman, sehingga pengguna berpindah antarhalaman dengan mudah. Dengan memanfaatkan ketiga widget ini secara terintegrasi, aplikasi memiliki tata letak yang seragam, mudah digunakan, serta memberikan user experience yang terstruktur.
+
+3. Dalam konteks desain antarmuka, apa kelebihan menggunakan layout widget seperti Padding, SingleChildScrollView, dan ListView saat menampilkan elemen-elemen form? Berikan contoh penggunaannya dari aplikasi kamu.
+    Dalam konteks desain antarmuka, penggunaan layout widget seperti Padding, SingleChildScrollView, dan ListView memberikan kelebihan penting dalam hal kenyamanan tampilan, keterbacaan, serta responsivitas antarmuka, terutama saat menampilkan elemen-elemen form yang kompleks dan panjang seperti pada aplikasi Sport Center.
+
+    Widget Padding digunakan untuk memberikan jarak di sekitar elemen form agar tampilan tidak terlalu rapat dan tetap nyaman dilihat. Misalnya, pada setiap field input seperti Product Name dan Price, terdapat potongan kode seperti Padding(padding: const EdgeInsets.all(8.0), child: TextFormField(...)) yang membuat setiap elemen form memiliki ruang antarbagian, sehingga pengguna dapat dengan mudah membedakan satu input dengan input lainnya.
+
+    Kemudian, SingleChildScrollView digunakan untuk memungkinkan seluruh isi form di-scroll ketika konten melebihi tinggi layar. Ini sangat penting agar user tetap dapat mengakses semua bagian form, terutama pada perangkat dengan ukuran layar kecil. Dalam kode, form dibungkus dengan SingleChildScrollView(child: Column(...)), sehingga saat halaman form panjang, user bisa scroll ke bawah tanpa ada elemen yang terpotong.
+
+    Sementara itu, ListView atau konsep yang sama dengan ListView (seperti ListView di dalam Drawer) digunakan untuk menampilkan daftar elemen yang bisa di-scroll secara vertikal secara efisien. Misalnya, pada LeftDrawer, ListView digunakan untuk menyusun elemen navigasi seperti Home dan Add Product agar tetap bisa diakses meskipun jumlah menu bertambah dan melebihi panjang layar.
+
+4. 
+    Dalam kode aplikasi Sport Center ini, penyesuaian warna tema dilakukan melalui pengaturan ThemeData dan ColorScheme di file main.dart agar seluruh tampilan aplikasi memiliki identitas visual yang konsisten dengan brand toko. Warna utama (primary color) dan warna sekunder (secondary color) dipilih dan didefinisikan secara eksplisit sehingga setiap elemen antarmuka—seperti AppBar, Drawer, tombol, dan kartu produk—menampilkan nuansa warna yang sama. Misalnya, pada kode colorScheme: ColorScheme.fromSwatch(primarySwatch: MaterialColor(0xFF2E7D32, {...})).copyWith(secondary: Color(0xFF4CAF50)), warna hijau tua (0xFF2E7D32) digunakan sebagai warna utama.
+
+    Dengan memanfaatkan Theme.of(context).colorScheme.primary dan Theme.of(context).colorScheme.secondary di seluruh file seperti menu.dart, left_drawer.dart, dan product_form.dart, setiap komponen aplikasi otomatis menyesuaikan warna sesuai tema yang sudah ditetapkan.
