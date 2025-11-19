@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sport_center/screens/product_form.dart';
+import 'package:sport_center/screens/product_entry_list.dart';
 
 class ItemHomepage {
  final String name;
@@ -30,15 +31,29 @@ class ItemCard extends StatelessWidget {
           ScaffoldMessenger.of(context)
             ..hideCurrentSnackBar()
             ..showSnackBar(
-              SnackBar(content: Text("Kamu telah menekan tombol ${item.name}!"))
+              SnackBar(content: Text("Opening ${item.name}!"))
             );
-          if (item.name == "Create Product") {
+            if (item.name == "Create Product") {
             Navigator.push(
               context,
               MaterialPageRoute(
                 builder: (context) => const ProductFormPage(),
               ),
             );
+            } else if (item.name == "All Products") {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const ProductEntryListPage()
+                ),
+              );
+            } else if (item.name == "My Products") {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const ProductEntryListPage(isMyProducts: true)
+                ),
+              );
           }
         },
         // Container untuk menyimpan Icon dan Text

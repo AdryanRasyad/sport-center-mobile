@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sport_center/screens/menu.dart';
+import 'package:sport_center/screens/product_entry_list.dart';
 
 import 'package:sport_center/screens/product_form.dart';
 
@@ -67,6 +68,17 @@ class LeftDrawer extends StatelessWidget {
                 ),
               );
             },
+          ),
+          ListTile(
+              leading: const Icon(Icons.add_reaction_rounded),
+              title: const Text('Products List'),
+              onTap: () {
+                  // Route to product list page
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const ProductEntryListPage()),
+                  );
+              },
           ),
         ],
       ),

@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:sport_center/widgets/left_drawer.dart';
-// TODO: Impor drawer yang sudah dibuat sebelumnya
+import 'dart:convert';
+import 'package:provider/provider.dart';
+import 'package:pbp_django_auth/pbp_django_auth.dart';
+import 'package:sport_center/screens/menu.dart';
+
 
 class ProductFormPage extends StatefulWidget {
     const ProductFormPage({super.key});
@@ -11,8 +15,9 @@ class ProductFormPage extends StatefulWidget {
 
 class _ProductFormPageState extends State<ProductFormPage> {
     final _formKey = GlobalKey<FormState>();
-    String _productName = "";
-    String _price = "";
+    String _id = "";
+    String _name = "";
+    int _price = 0;
     String _description = "";
     String _category = "footwear"; // default
     String _thumbnail = "";
@@ -27,6 +32,7 @@ class _ProductFormPageState extends State<ProductFormPage> {
 
     @override
     Widget build(BuildContext context) {
+        final request = context.watch<CookieRequest>();
         return Scaffold(
           appBar: AppBar(
             title: const Center(
@@ -57,7 +63,7 @@ class _ProductFormPageState extends State<ProductFormPage> {
                             ),
                           ),
                           onSaved: (String? value) {
-                            _productName = value!;
+                            _name = value!;
                           },
                           validator: (String? value) {
                             if (value == null || value.isEmpty) {
@@ -83,7 +89,7 @@ class _ProductFormPageState extends State<ProductFormPage> {
                             ),
                           ),
                           onSaved: (String? value) {
-                            _price = value!;
+                            _price = int.tryParse(value ?? "0") ?? 0;
                           },
                           validator: (String? value) {
                             if (value == null || value.isEmpty) {
@@ -215,42 +221,43 @@ class _ProductFormPageState extends State<ProductFormPage> {
                         backgroundColor:
                             MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
                       ),
-                      onPressed: () {
-                        if (_formKey.currentState!.validate()) {
-                          // Save form field values from onSaved callbacks
-                          _formKey.currentState!.save();
-                          showDialog(
-                            context: context,
-                            builder: (context) {
-                              return AlertDialog(
-                                title: const Text('Product successfully saved!'),
-                                content: SingleChildScrollView(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text('Product Name: $_productName'),
-                                        Text('Price: $_price'),
-                                        Text('Description: $_description'),
-                                        Text('Category: $_category'),
-                                        Text('Thumbnail: $_thumbnail'),
-                                        Text(
-                                            'Featured: ${_isFeatured ? "Yes" : "No"}'),
-                                    ],
-                                  ),
-                                ),
-                                actions: [
-                                  TextButton(
-                                    child: const Text('OK'),
-                                    onPressed: () {
-                                      Navigator.pop(context);
-                                      _formKey.currentState!.reset();
-                                    },
-                                  ),
-                                ],
-                              );
-                            },
+                      onPressed: () async {
+                      if (_formKey.currentState!.validate()) {
+                        _formKey.currentState!.save();
+
+                          // TODO: Replace the URL with your app's URL
+                          // To connect Android emulator with Django on localhost, use URL http://10.0.2.2/
+                          // If you using chrome,  use URL http://localhost:8000
+                          
+                          final response = await request.postJson(
+                            "http://localhost:8000/create-flutter/",
+                            jsonEncode({
+                              "name": _name,
+                              "price": _price,
+                              "description": _description,
+                              "category": _category,
+                              "thumbnail": _thumbnail,
+                              "is_featured": _isFeatured,
+                            }),
                           );
+                          if (context.mounted) {
+                            if (response['status'] == 'success') {
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(const SnackBar(
+                                content: Text("Product successfully added!"),
+                              ));
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => MyHomePage(colorScheme: Theme.of(context).colorScheme)),
+                              );
+                            } else {
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(const SnackBar(
+                                content: Text("Something went wrong, please try again."),
+                              ));
+                            }
+                          }
                         }
                       },
                       child: const Text(
@@ -261,6 +268,8 @@ class _ProductFormPageState extends State<ProductFormPage> {
                   ),
                 ),
               ],
+                
+
                 
                 
                 
